@@ -1,33 +1,33 @@
 package model;
 
-public class Cell {
-    public enum CellState {
+public class Square {
+    public enum SquareState {
         BLACK,
         WHITE
     }
 
-    CellState state;
+    SquareState state;
 
     /**
      * Generate a Cell with the given state.
      * @param state The state you want to initialize the Cell with.
      */
-    public Cell(CellState state) {
+    public Square(SquareState state) {
         this.state = state;
     }
 
     /**
      * Generate a Cell with a default state of BLACK.
      */
-    public Cell() {
-        this.state = CellState.BLACK;
+    public Square() {
+        this.state = SquareState.BLACK;
     }
 
     /**
      * Set the state of the cell.
      * @param state The state you want to set the cell to.
      */
-    public void setState(CellState state) {
+    public void setState(SquareState state) {
         this.state = state;
     }
 
@@ -35,7 +35,7 @@ public class Cell {
      * Get the state of this cell.
      * @return The state.
      */
-    public CellState getState() {
+    public SquareState getState() {
         return state;
     }
 }
