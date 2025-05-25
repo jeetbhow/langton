@@ -2,7 +2,7 @@ package model;
 
 import org.junit.jupiter.api.Test;
 
-import model.Square.SquareState;
+import model.Square.SquareColor;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,7 +32,7 @@ public class BoardTest {
         var board = new Board(3, 3);
         for (int i = 0; i < board.height; i++) {
             for (int j = 0; j < board.width; j++) {
-                assertEquals(SquareState.BLACK, board.getStateAt(i, j));
+                assertEquals(SquareColor.BLACK, board.getStateAt(i, j));
             }
         }
     }
@@ -47,7 +47,7 @@ public class BoardTest {
 
         assertTrue(board.isAntAt(1, 0));
         assertEquals(3, board.getAntDirection());
-        assertEquals(SquareState.WHITE, board.getStateAt(1, 1));
+        assertEquals(SquareColor.WHITE, board.getStateAt(1, 1));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class BoardTest {
 
         assertTrue(board.isAntAt(1, 2));
         assertEquals(1, board.getAntDirection());
-        assertEquals(SquareState.BLACK, board.getStateAt(1, 1));
+        assertEquals(SquareColor.BLACK, board.getStateAt(1, 1));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class BoardTest {
 
         assertTrue(board.isAntAt(0, 1));
         assertEquals(0, board.getAntDirection());
-        assertEquals(SquareState.BLACK, board.getStateAt(1, 1));
+        assertEquals(SquareColor.BLACK, board.getStateAt(1, 1));
     }
 
     @Test

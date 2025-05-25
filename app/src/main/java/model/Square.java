@@ -1,48 +1,48 @@
 package model;
 
 public class Square {
-    public enum SquareState {
+    public enum SquareColor {
         BLACK,
         WHITE
     }
 
-    SquareState state;
+    SquareColor color;
 
     /**
      * Generate a Cell with the given state.
      * @param state The state you want to initialize the Cell with.
      */
-    public Square(SquareState state) {
-        this.state = state;
+    public Square(SquareColor state) {
+        this.color = state;
     }
 
     /**
-     * Generate a Cell with a default state of BLACK.
+     * Generate a Cell with a default color of BLACK.
      */
     public Square() {
-        this.state = SquareState.BLACK;
+        this.color = SquareColor.BLACK;
     }
 
     /**
-     * Set the state of the cell.
+     * Set the color of the square.
      * @param state The state you want to set the cell to.
      */
-    public void setState(SquareState state) {
-        this.state = state;
+    public void setColor(SquareColor state) {
+        this.color = state;
     }
 
     /**
-     * Toggle the state of the square.
+     * Toggle the color of the square.
      */
     public void toggleState() {
-        state = state == SquareState.BLACK ? SquareState.WHITE : SquareState.BLACK; 
+        color = color == SquareColor.BLACK ? SquareColor.WHITE : SquareColor.BLACK; 
     }
 
     /**
-     * Get the state of this cell.
+     * Get the color of the square.
      * @return The state.
      */
-    public SquareState getState() {
-        return state;
+    public SquareColor getColor() {
+        return color;
     }
 }

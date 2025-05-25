@@ -1,6 +1,6 @@
 package model;
 
-import model.Square.SquareState;
+import model.Square.SquareColor;
 
 public class Board {
     int width;
@@ -31,8 +31,8 @@ public class Board {
      * @param col The x-coordinate of the location.
      * @return A SquareState enum indicating the color of the square at that location.
      */
-    public SquareState getStateAt(int row, int col) {
-        return squares[row][col].getState();
+    public SquareColor getStateAt(int row, int col) {
+        return squares[row][col].getColor();
     }
 
     /**
@@ -51,7 +51,7 @@ public class Board {
     public void resetState() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (squares[i][j].getState() == SquareState.WHITE) {
+                if (squares[i][j].getColor() == SquareColor.WHITE) {
                     flipStateAt(i, j);
                 }
             }
@@ -107,13 +107,13 @@ public class Board {
      */
     public void update() {
         Square square = squares[antRow][antCol];
-        SquareState color = square.getState();
+        SquareColor color = square.getColor();
 
         // Flip the square that the ant is on.
         flipStateAt(antRow, antCol);
 
         // Change the ant direction.
-        if (color == SquareState.WHITE) {
+        if (color == SquareColor.WHITE) {
             antDirection = (antDirection + 1) % 4;
         } else {
             antDirection = (antDirection + 3) % 4;
