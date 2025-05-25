@@ -8,7 +8,7 @@ public class Board {
     int antX;
     int antY;
     byte direction;          // Range 0-3. Loops back around. 
-    Square[] squares;
+    Square[][] squares;
 
     /**
      * Create a Board with the given dimensions. Each square in the board is
@@ -17,7 +17,7 @@ public class Board {
      * @param height The height of the Board.
      */
     public Board(int width, int height) {
-        
+        // TODO
     }
 
     /**
