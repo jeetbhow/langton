@@ -32,6 +32,13 @@ public class Square {
     }
 
     /**
+     * Toggle the state of the square.
+     */
+    public void toggleState() {
+        state = state == SquareState.BLACK ? SquareState.WHITE : SquareState.BLACK; 
+    }
+
+    /**
      * Get the state of this cell.
      * @return The state.
      */

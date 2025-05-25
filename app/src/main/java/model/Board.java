@@ -42,12 +42,7 @@ public class Board {
      * @param state The state that you want to set the square to.
      */
     public void flipStateAt(int row, int col) {
-        SquareState state = squares[row][col].getState();
-        if (state == SquareState.BLACK) {
-            squares[row][col].setState(SquareState.WHITE);
-        } else {
-            squares[row][col].setState(SquareState.BLACK);
-        }
+        squares[row][col].toggleState();
     }
 
     /**
