@@ -27,6 +27,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
+    @Test 
+    void New_board_squares_should_be_black() {
+        var board = new Board(3, 3);
+        for (int i = 0; i < board.height; i++) {
+            for (int j = 0; j < board.width; j++) {
+                assertEquals(SquareState.BLACK, board.getStateAt(i, j));
+            }
+        }
+    }
+
     @Test
     void Ant_should_move_west_when_facing_north_on_black_square() {
         var board = new Board(3, 3);

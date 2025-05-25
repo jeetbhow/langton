@@ -17,7 +17,7 @@ public class Board {
      * @param height The height of the Board.
      */
     public Board(int width, int height) {
-        // TODO
+        
     }
 
     /**
