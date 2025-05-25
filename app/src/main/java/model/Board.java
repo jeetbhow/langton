@@ -5,9 +5,9 @@ import model.Square.SquareState;
 public class Board {
     int width;
     int height;
-    int antX;
-    int antY;
-    byte direction;          // Range 0-3. Loops back around. 
+    int antRow;
+    int antCol;
+    int antDirection;          // Range 0-3. Loops back around. 
     Square[][] squares;
 
     /**
@@ -17,7 +17,12 @@ public class Board {
      * @param height The height of the Board.
      */
     public Board(int width, int height) {
-        // TODO
+        squares = new Square[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                squares[i][j] = new Square();
+            }
+        }
     }
 
     /**
@@ -27,8 +32,7 @@ public class Board {
      * @return A SquareState enum indicating the color of the square at that location.
      */
     public SquareState getStateAt(int row, int col) {
-        // TODO
-        return SquareState.BLACK;
+        return squares[row][col].getState();
     }
 
     /**
@@ -38,14 +42,25 @@ public class Board {
      * @param state The state that you want to set the square to.
      */
     public void flipStateAt(int row, int col) {
-        // TODO
+        SquareState state = squares[row][col].getState();
+        if (state == SquareState.BLACK) {
+            squares[row][col].setState(SquareState.WHITE);
+        } else {
+            squares[row][col].setState(SquareState.BLACK);
+        }
     }
 
     /**
      * Reset the entire state of the board to black.
      */
     public void resetState() {
-        // TODO
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (squares[i][j].getState() == SquareState.WHITE) {
+                    flipStateAt(i, j);
+                }
+            }
+        }
     }
 
     /**
@@ -54,7 +69,8 @@ public class Board {
      * @param col The x-coordinate of the ant.
      */
     public void setAnt(int row, int col) {
-        // TODO
+        antRow = row;
+        antCol = col;
     }
 
     /**
@@ -65,7 +81,10 @@ public class Board {
      * @throws IllegalArgumentException If an integer outside the range of [0, 3] is passed in.
      */
     public void setAntDirection(int direction) throws IllegalArgumentException {
-        // TODO
+        if (direction > 3 || direction < 0) {
+            throw new IllegalArgumentException("Direction should be between 0 and 3.");
+        }
+        this.antDirection = direction;
     }
 
     /**
@@ -75,8 +94,7 @@ public class Board {
      * @return A boolean value indicating whether or not the ant is at the position.
      */
     public boolean isAntAt(int row, int col) {
-        // TODO
-        return false;
+        return antRow == row && antCol == col;
     }
 
     /**
@@ -86,14 +104,40 @@ public class Board {
      * @return An integer from 0-3 representing the ant's current direction.
      */
     public int getAntDirection() {
-        // TODO
-        return 0;
+        return antDirection;
     }
 
     /**
      * Update the state of the board.
      */
     public void update() {
-        // TODO
+        Square square = squares[antRow][antCol];
+        SquareState color = square.getState();
+
+        // Flip the square that the ant is on.
+        flipStateAt(antRow, antCol);
+
+        // Change the ant direction.
+        if (color == SquareState.WHITE) {
+            antDirection = (antDirection + 1) % 4;
+        } else {
+            antDirection = (antDirection + 3) % 4;
+        }
+
+        // Move based on that direction
+        switch (antDirection) {
+            case 0 -> {
+                antRow--;
+            }
+            case 1 -> {
+                antCol++;
+            }
+            case 2 -> {
+                antRow++;
+            } 
+            case 3 -> {
+                antCol--;
+            }
+        }
     }   
 }

@@ -61,7 +61,7 @@ public class BoardTest {
 
         assertTrue(board.isAntAt(1, 2));
         assertEquals(1, board.getAntDirection());
-        assertEquals(SquareState.WHITE, board.getStateAt(1, 1));
+        assertEquals(SquareState.BLACK, board.getStateAt(1, 1));
     }
 
     @Test
