@@ -4,6 +4,7 @@
 
 plugins {
     id 'buildlogic.java-application-conventions'
+    id 'application'
 }
 
 dependencies {
@@ -13,5 +14,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'App'
+    mainClass = 'ui.App'
 }

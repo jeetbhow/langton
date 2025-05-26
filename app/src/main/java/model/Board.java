@@ -6,7 +6,7 @@ public class Board {
     private int width;
     private int height;
     private Square[][] squares;
-    private Ant ant = new Ant();
+    private Ant ant;
 
     /**
      * Create a Board with the given dimensions. Each square in the board is
@@ -18,6 +18,9 @@ public class Board {
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
+
+        ant = new Ant(width / 2, height / 2);
+
         squares = new Square[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {

@@ -5,6 +5,12 @@ public class Ant {
     private int col;
     private int direction; // Range 0-3. Loops back around.
 
+    public Ant(int row, int col) {
+        this.row = row;
+        this.col = col;
+        this.direction = 0;
+    }
+
     /**
      * Set the location of the ant.
      * 
