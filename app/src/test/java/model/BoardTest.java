@@ -30,8 +30,8 @@ public class BoardTest {
     @Test 
     void New_board_squares_should_be_black() {
         var board = new Board(3, 3);
-        for (int i = 0; i < board.height; i++) {
-            for (int j = 0; j < board.width; j++) {
+        for (int i = 0; i < board.getHeight(); i++) {
+            for (int j = 0; j < board.getWidth(); j++) {
                 assertEquals(SquareColor.BLACK, board.getStateAt(i, j));
             }
         }
@@ -40,7 +40,7 @@ public class BoardTest {
     @Test
     void Ant_should_move_west_when_facing_north_on_black_square() {
         var board = new Board(3, 3);
-        board.setAnt(1, 1);
+        board.moveAntTo(1, 1);
         board.setAntDirection(0);
         
         board.update();
@@ -53,7 +53,7 @@ public class BoardTest {
     @Test
     void Ant_should_move_east_when_facing_north_on_white_square() {
         var board = new Board(3, 3);
-        board.setAnt(1, 1);
+        board.moveAntTo(1, 1);
         board.setAntDirection(0);
         board.flipStateAt(1, 1);
         
@@ -67,7 +67,7 @@ public class BoardTest {
     @Test
     void Ant_should_move_north_when_facing_west_on_white_square() {
         var board = new Board(3, 3);
-        board.setAnt(1, 1);
+        board.moveAntTo(1, 1);
         board.setAntDirection(3);
         board.flipStateAt(1, 1);
         
