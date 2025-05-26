@@ -19,8 +19,6 @@ public class Board {
         this.width = width;
         this.height = height;
 
-        ant = new Ant(width / 2, height / 2);
-
         squares = new Square[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -75,6 +73,18 @@ public class Board {
      */
     public boolean isAntAt(int row, int col) {
         return ant.isAt(row, col);
+    }
+
+    /**
+     * Create an ant at the given location. If an ant already exists then nothing happens.
+     * 
+     * @param row The row you want to put the ant at.
+     * @param col The column you want to put the ant at.
+     */
+    public void createAnt(int row, int col) {
+        if (ant == null) {
+            ant = new Ant(row, col);
+        }
     }
 
     /**
@@ -139,8 +149,14 @@ public class Board {
 
     /**
      * Update the state of the board.
+     * 
+     * @throws IllegalStateException If there is no ant currently on the board.
      */
     public void update() {
+        if (ant == null) {
+            throw new IllegalStateException("There must be an ant on the board to call update.");
+        }
+
         int antRow = ant.getRow();
         int antCol = ant.getCol();
         Square square = squares[antRow][antCol];

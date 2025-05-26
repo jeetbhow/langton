@@ -40,9 +40,18 @@ public class BoardTest {
     }
 
     @Test
+    void Update_when_no_ant_will_throw() {
+        var board = new Board(3, 3);
+        
+        assertThrows(IllegalStateException.class, () -> {
+            board.update();
+        });
+    }
+
+    @Test
     void Ant_should_move_west_when_facing_north_on_black_square() {
         var board = new Board(3, 3);
-        board.moveAntTo(1, 1);
+        board.createAnt(1, 1);
         board.setAntDirection(0);
         
         board.update();
@@ -55,7 +64,7 @@ public class BoardTest {
     @Test
     void Ant_should_move_east_when_facing_north_on_white_square() {
         var board = new Board(3, 3);
-        board.moveAntTo(1, 1);
+        board.createAnt(1, 1);
         board.setAntDirection(0);
         board.flipStateAt(1, 1);
         
@@ -69,7 +78,7 @@ public class BoardTest {
     @Test
     void Ant_should_move_north_when_facing_west_on_white_square() {
         var board = new Board(3, 3);
-        board.moveAntTo(1, 1);
+        board.createAnt(1, 1);
         board.setAntDirection(3);
         board.flipStateAt(1, 1);
         

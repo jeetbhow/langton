@@ -33,7 +33,16 @@ public class App extends JFrame implements SimulationController {
         var app = new App();
         app.run();
     }
-    
+
+    private void run() {
+        add(sidebar, BorderLayout.WEST);
+        add(grid, BorderLayout.CENTER);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        setVisible(true);
+    }
+
     @Override
     public void start() {
         timer.start();
@@ -50,16 +59,7 @@ public class App extends JFrame implements SimulationController {
         board.moveAntTo(GRID_HEIGHT / 2, GRID_WIDTH / 2);
         grid.repaint();
     }
-
-    private void run() {
-        add(sidebar, BorderLayout.WEST);
-        add(grid, BorderLayout.CENTER);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        setVisible(true);
-    }
-
+    
     private void updateBoard(ActionEvent event) {
         try {
             board.update();
