@@ -16,6 +16,8 @@ public class Board {
      * @param height The height of the Board.
      */
     public Board(int width, int height) {
+        this.width = width;
+        this.height = height;
         squares = new Square[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -104,7 +106,7 @@ public class Board {
      * @return A SquareState enum indicating the color of the square at that
      *         location.
      */
-    public SquareColor getStateAt(int row, int col) {
+    public SquareColor getColorAt(int row, int col) {
         return squares[row][col].getColor();
     }
 

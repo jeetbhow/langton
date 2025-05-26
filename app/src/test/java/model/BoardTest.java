@@ -30,9 +30,11 @@ public class BoardTest {
     @Test 
     void New_board_squares_should_be_black() {
         var board = new Board(3, 3);
+        assertEquals(3, board.getWidth());
+        assertEquals(3, board.getHeight());
         for (int i = 0; i < board.getHeight(); i++) {
             for (int j = 0; j < board.getWidth(); j++) {
-                assertEquals(SquareColor.BLACK, board.getStateAt(i, j));
+                assertEquals(SquareColor.BLACK, board.getColorAt(i, j));
             }
         }
     }
@@ -47,7 +49,7 @@ public class BoardTest {
 
         assertTrue(board.isAntAt(1, 0));
         assertEquals(3, board.getAntDirection());
-        assertEquals(SquareColor.WHITE, board.getStateAt(1, 1));
+        assertEquals(SquareColor.WHITE, board.getColorAt(1, 1));
     }
 
     @Test
@@ -61,7 +63,7 @@ public class BoardTest {
 
         assertTrue(board.isAntAt(1, 2));
         assertEquals(1, board.getAntDirection());
-        assertEquals(SquareColor.BLACK, board.getStateAt(1, 1));
+        assertEquals(SquareColor.BLACK, board.getColorAt(1, 1));
     }
 
     @Test
@@ -75,7 +77,7 @@ public class BoardTest {
 
         assertTrue(board.isAntAt(0, 1));
         assertEquals(0, board.getAntDirection());
-        assertEquals(SquareColor.BLACK, board.getStateAt(1, 1));
+        assertEquals(SquareColor.BLACK, board.getColorAt(1, 1));
     }
 
     @Test
