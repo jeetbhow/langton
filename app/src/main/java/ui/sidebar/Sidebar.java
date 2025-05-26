@@ -2,26 +2,26 @@ package ui.sidebar;
 
 import java.awt.Dimension;
 
-import javax.swing.Timer;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import ui.SimulationController;
+
 public class Sidebar extends JPanel {
-    private JButton start = new JButton("Start");
-    private JButton pause = new JButton("Pause");
+    private JButton startBtn = new JButton("Start");
+    private JButton pauseBtn = new JButton("Pause");
+    private JButton resetBtn = new JButton("Reset");
 
-    private Timer timer;
-
-    public Sidebar(Timer timer) {
-        this.timer = timer;
-
+    public Sidebar(SimulationController controller) {
         Dimension preferredSize = getPreferredSize();
         setPreferredSize(new Dimension(250, preferredSize.height));
 
-        start.addActionListener(e -> timer.start());
-        pause.addActionListener(e -> timer.stop());
+        startBtn.addActionListener(e -> controller.start());
+        pauseBtn.addActionListener(e -> controller.pause());
+        resetBtn.addActionListener(e -> controller.reset());
 
-        add(start);
-        add(pause);
+        add(startBtn);
+        add(pauseBtn);
+        add(resetBtn);
     }
 }

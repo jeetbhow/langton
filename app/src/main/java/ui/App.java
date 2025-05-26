@@ -11,7 +11,7 @@ import model.Board;
 import ui.sidebar.Sidebar;
 import ui.grid.Grid;
 
-public class App extends JFrame {
+public class App extends JFrame implements SimulationController {
     private static final int SCREEN_WIDTH = 1280;
     private static final int SCREEN_HEIGHT = 720;
     private static final int GRID_WIDTH = 250;
@@ -19,11 +19,11 @@ public class App extends JFrame {
 
     private Board board = new Board(GRID_WIDTH, GRID_HEIGHT);
     private Timer timer = new Timer(1, this::updateBoard);
-    private Sidebar sidebar = new Sidebar(timer);
+    
+    private Sidebar sidebar = new Sidebar(this);
     private Grid grid = new Grid(board);
 
     public static void main(String[] args) {
-
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -32,6 +32,23 @@ public class App extends JFrame {
 
         var app = new App();
         app.run();
+    }
+    
+    @Override
+    public void start() {
+        timer.start();
+    }
+
+    @Override
+    public void pause() {
+        timer.stop();
+    }
+
+    @Override
+    public void reset() {
+        board.resetState();
+        board.moveAntTo(GRID_HEIGHT / 2, GRID_WIDTH / 2);
+        grid.repaint();
     }
 
     private void run() {
