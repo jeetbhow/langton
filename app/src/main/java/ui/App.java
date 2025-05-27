@@ -35,7 +35,7 @@ public class App extends JFrame implements SimulationController {
     }
 
     public App() {
-        timer = new Timer(1, this::updateBoard);
+        timer = new Timer(25, this::updateBoard);
         sidebar = new Sidebar(this);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,6 +65,11 @@ public class App extends JFrame implements SimulationController {
         board.resetState();
         board.moveAntTo(GRID_HEIGHT / 2, GRID_WIDTH / 2);
         grid.repaint();
+    }
+    
+    @Override
+    public void changeDelay(int delay) {
+        timer.setDelay(delay);
     }
     
     private void updateBoard(ActionEvent event) {
