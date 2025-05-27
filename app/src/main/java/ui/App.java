@@ -15,8 +15,8 @@ import ui.grid.Grid;
 public class App extends JFrame implements SimulationController {
     private static final int SCREEN_WIDTH = 1280;
     private static final int SCREEN_HEIGHT = 720;
-    private static final int GRID_WIDTH = 200;
-    private static final int GRID_HEIGHT = 200;
+    private static final int BOARD_HEIGHT = 200;
+    private static final int BOARD_WIDTH = 200;
 
     private Timer timer;
     private Sidebar sidebar;
@@ -38,16 +38,16 @@ public class App extends JFrame implements SimulationController {
         timer = new Timer(25, this::updateBoard);
         sidebar = new Sidebar(this);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        setVisible(true);
-
-        board = new Board(GRID_WIDTH, GRID_HEIGHT);
-        board.createAnt(GRID_HEIGHT / 2, GRID_WIDTH / 2);
+        board = new Board(BOARD_WIDTH, BOARD_HEIGHT);
+        board.createAnt(BOARD_HEIGHT / 2, BOARD_WIDTH / 2);
         grid = new Grid(board);
 
         add(sidebar, BorderLayout.WEST);
         add(grid, BorderLayout.CENTER);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        setVisible(true);
     }
 
     @Override
@@ -63,7 +63,8 @@ public class App extends JFrame implements SimulationController {
     @Override
     public void reset() {
         board.resetState();
-        board.moveAntTo(GRID_HEIGHT / 2, GRID_WIDTH / 2);
+        board.moveAntTo(Math.round(BOARD_HEIGHT / 2), Math.round(BOARD_WIDTH / 2));
+        board.setAntDirection(0);
         grid.repaint();
     }
     
