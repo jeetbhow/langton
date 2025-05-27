@@ -19,11 +19,8 @@ public class Grid extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int panelWidth = getWidth();
-        int panelHeight = getHeight();
-
-        int pixelWidth = Math.ceilDiv(panelWidth, board.getWidth());
-        int pixelHeight = Math.ceilDiv(panelHeight, board.getHeight());
+        int pixelWidth = Math.ceilDiv(getWidth(), board.getWidth());
+        int pixelHeight = Math.ceilDiv(getHeight(), board.getHeight());
 
         for (int i = 0; i < board.getHeight(); i++) {
             for (int j = 0; j < board.getWidth(); j++) {
