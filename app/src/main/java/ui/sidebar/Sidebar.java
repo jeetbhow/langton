@@ -31,7 +31,6 @@ public class Sidebar extends JPanel {
         delaySliderBox.add(delayLabel);
         delaySliderBox.add(delaySlider);
 
-
         add(startBtn);
         add(pauseBtn);
         add(resetBtn);

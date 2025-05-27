@@ -76,7 +76,8 @@ public class Board {
     }
 
     /**
-     * Create an ant at the given location. If an ant already exists then nothing happens.
+     * Create an ant at the given location. If an ant already exists then nothing
+     * happens.
      * 
      * @param row The row you want to put the ant at.
      * @param col The column you want to put the ant at.
@@ -89,6 +90,7 @@ public class Board {
 
     /**
      * Get the direction the ant is facing.
+     * 
      * @return
      */
     public int getAntDirection() {

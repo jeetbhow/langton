@@ -24,8 +24,11 @@ public class Grid extends JPanel {
 
         for (int i = 0; i < board.getHeight(); i++) {
             for (int j = 0; j < board.getWidth(); j++) {
-                Color color = board.getColorAt(i, j) == SquareColor.BLACK ? Color.BLACK : Color.WHITE;
-                g.setColor(color);
+                if (board.getColorAt(i, j) == SquareColor.BLACK) {
+                    g.setColor(Color.BLACK);
+                } else {
+                    g.setColor(Color.WHITE);
+                }
                 g.fillRect(j * pixelWidth, i * pixelHeight, pixelWidth, pixelHeight);
             }
         }
