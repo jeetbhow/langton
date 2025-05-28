@@ -5,4 +5,5 @@ public interface SimulationController {
     void pause();
     void reset();
     void changeDelay(int delay);
+    void changeResolution(String resolution);
 }

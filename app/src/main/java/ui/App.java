@@ -7,6 +7,8 @@ import javax.swing.UIManager;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import model.Board;
 import ui.sidebar.Sidebar;
@@ -15,8 +17,8 @@ import ui.grid.Grid;
 public class App extends JFrame implements SimulationController {
     private static final int SCREEN_WIDTH = 1280;
     private static final int SCREEN_HEIGHT = 720;
-    private static final int BOARD_HEIGHT = 200;
-    private static final int BOARD_WIDTH = 200;
+    private static final int BOARD_HEIGHT = 320;
+    private static final int BOARD_WIDTH = 240;
 
     private Timer timer;
     private Sidebar sidebar;
@@ -80,5 +82,26 @@ public class App extends JFrame implements SimulationController {
         } catch (IndexOutOfBoundsException e) {
             timer.stop();
         }
+    }
+
+    @Override
+    public void changeResolution(String resolution) {
+        String regex = "(\\d{3,4})x(\\d{3,4})";
+        
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(resolution);
+
+        if (!matcher.find()) {
+            throw new IllegalArgumentException("The resolution " + resolution + " is not supported.");
+        }
+
+        int width = Integer.parseInt(matcher.group(1));
+        int height = Integer.parseInt(matcher.group(2));
+
+        this.board = new Board(width, height);
+        board.createAnt((board.getHeight() / 2), (board.getWidth() / 2));
+        board.setAntDirection(0);
+        grid.setBoard(this.board);
+        repaint();
     }
 }

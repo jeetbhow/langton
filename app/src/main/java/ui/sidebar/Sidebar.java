@@ -68,10 +68,15 @@ public class Sidebar extends JPanel {
         // Resolution picker
         Box resolutionBox = Box.createHorizontalBox();
         var resolutionLabel = new JLabel("Resolution");
+        
         var resolutionDropDown = new JComboBox<>(new String[] {
                 "320x240", "640x480", "800x600",
                 "1024x768", "1280x720", "1600x900",
                 "1920x1080", "2560x1440", "3840x2160"
+        });
+        resolutionDropDown.addActionListener(e -> { 
+            String selectedResolution = resolutionDropDown.getSelectedItem().toString();
+            controller.changeResolution(selectedResolution);
         });
     
         resolutionBox.add(resolutionLabel);
