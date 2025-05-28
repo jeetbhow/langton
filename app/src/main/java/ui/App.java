@@ -17,14 +17,18 @@ import ui.grid.Grid;
 public class App extends JFrame implements SimulationController {
     private static final int SCREEN_WIDTH = 1280;
     private static final int SCREEN_HEIGHT = 720;
-    private static final int BOARD_HEIGHT = 320;
-    private static final int BOARD_WIDTH = 240;
+    private static final int BOARD_WIDTH = 50;
+    private static final int BOARD_HEIGHT = 50;
+    private static final String[] RESOLUTIONS = new String[] {
+        "50x50", "100x100", "200x200",
+        "400x400", "800x800", "1600x1600",
+    };
 
     private Timer timer;
     private Sidebar sidebar;
     private Board board;
     private Grid grid;
-
+  
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
@@ -38,7 +42,7 @@ public class App extends JFrame implements SimulationController {
 
     public App() {
         timer = new Timer(25, this::updateBoard);
-        sidebar = new Sidebar(this);
+        sidebar = new Sidebar(this, RESOLUTIONS);
 
         board = new Board(BOARD_WIDTH, BOARD_HEIGHT);
         board.createAnt(BOARD_HEIGHT / 2, BOARD_WIDTH / 2);
@@ -50,6 +54,15 @@ public class App extends JFrame implements SimulationController {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         setVisible(true);
+    }
+
+    private void updateBoard(ActionEvent event) {
+        try {
+            board.update();
+            grid.repaint();
+        } catch (IndexOutOfBoundsException e) {
+            timer.stop();
+        }
     }
 
     @Override
@@ -69,25 +82,16 @@ public class App extends JFrame implements SimulationController {
         board.setAntDirection(0);
         grid.repaint();
     }
-    
+
     @Override
     public void changeDelay(int delay) {
         timer.setDelay(delay);
     }
-    
-    private void updateBoard(ActionEvent event) {
-        try {
-            board.update();
-            grid.repaint();
-        } catch (IndexOutOfBoundsException e) {
-            timer.stop();
-        }
-    }
 
     @Override
     public void changeResolution(String resolution) {
-        String regex = "(\\d{3,4})x(\\d{3,4})";
-        
+        String regex = "(\\d{2,4})x(\\d{2,4})";
+
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(resolution);
 
@@ -101,7 +105,7 @@ public class App extends JFrame implements SimulationController {
         this.board = new Board(width, height);
         board.createAnt((board.getHeight() / 2), (board.getWidth() / 2));
         board.setAntDirection(0);
-        grid.setBoard(this.board);
-        repaint();
+
+        grid.setBoard(board);
     }
 }

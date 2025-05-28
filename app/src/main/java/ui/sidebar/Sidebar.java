@@ -16,9 +16,9 @@ import ui.SimulationController;
 
 public class Sidebar extends JPanel {
     private SimulationController controller;
-    private JPanel controls; // Delay slider and resolution dropdown go into their own panel.
+    private JPanel controls;
 
-    public Sidebar(SimulationController controller) {
+    public Sidebar(SimulationController controller, String[] resolutions) {
         this.controller = controller;
         controls = new JPanel();
         controls.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -28,7 +28,7 @@ public class Sidebar extends JPanel {
 
         setupTimelineBtns();
         setupDelaySlider();
-        setupResolutionDropdown();
+        setupResolutionDropdown(resolutions);
 
         add(controls, BorderLayout.CENTER);
     }
@@ -64,16 +64,10 @@ public class Sidebar extends JPanel {
         controls.add(delaySliderBox);
     }
 
-    private void setupResolutionDropdown() {
-        // Resolution picker
+    private void setupResolutionDropdown(String[] resolutions) {
         Box resolutionBox = Box.createHorizontalBox();
         var resolutionLabel = new JLabel("Resolution");
-        
-        var resolutionDropDown = new JComboBox<>(new String[] {
-                "320x240", "640x480", "800x600",
-                "1024x768", "1280x720", "1600x900",
-                "1920x1080", "2560x1440", "3840x2160"
-        });
+        var resolutionDropDown = new JComboBox<>(resolutions);
         resolutionDropDown.addActionListener(e -> { 
             String selectedResolution = resolutionDropDown.getSelectedItem().toString();
             controller.changeResolution(selectedResolution);
