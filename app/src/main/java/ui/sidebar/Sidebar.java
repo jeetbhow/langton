@@ -1,19 +1,40 @@
 package ui.sidebar;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.border.EmptyBorder;
 
 import ui.SimulationController;
 
 public class Sidebar extends JPanel {
+    private SimulationController controller;
+    private JPanel controls; // Delay slider and resolution dropdown go into their own panel.
+
     public Sidebar(SimulationController controller) {
+        this.controller = controller;
+        controls = new JPanel();
+        controls.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        setLayout(new BorderLayout(0, 10));
         setPreferredSize(new Dimension(250, getPreferredSize().height));
 
+        setupTimelineBtns();
+        setupDelaySlider();
+        setupResolutionDropdown();
+
+        add(controls, BorderLayout.CENTER);
+    }
+
+    private void setupTimelineBtns() {
+        Box btnBox = Box.createHorizontalBox();
         var startBtn = new JButton("Start");
         var pauseBtn = new JButton("Pause");
         var resetBtn = new JButton("Reset");
@@ -22,18 +43,39 @@ public class Sidebar extends JPanel {
         pauseBtn.addActionListener(e -> controller.pause());
         resetBtn.addActionListener(e -> controller.reset());
 
+        btnBox.setBorder(new EmptyBorder(5, 0, 0, 0));
+        btnBox.add(Box.createHorizontalGlue());
+        btnBox.add(startBtn);
+        btnBox.add(pauseBtn);
+        btnBox.add(resetBtn);
+        btnBox.add(Box.createHorizontalGlue());
+        add(btnBox, BorderLayout.NORTH);
+    }
+
+    private void setupDelaySlider() {
+        Box delaySliderBox = Box.createHorizontalBox();
         var delayLabel = new JLabel("Delay");
         var delaySlider = new JSlider(0, 50);
         delaySlider.setMajorTickSpacing(10);
         delaySlider.addChangeListener(e -> controller.changeDelay(delaySlider.getValue()));
 
-        var delaySliderBox = Box.createHorizontalBox();
         delaySliderBox.add(delayLabel);
         delaySliderBox.add(delaySlider);
+        controls.add(delaySliderBox);
+    }
 
-        add(startBtn);
-        add(pauseBtn);
-        add(resetBtn);
-        add(delaySliderBox);
+    private void setupResolutionDropdown() {
+        // Resolution picker
+        Box resolutionBox = Box.createHorizontalBox();
+        var resolutionLabel = new JLabel("Resolution");
+        var resolutionDropDown = new JComboBox<>(new String[] {
+                "320x240", "640x480", "800x600",
+                "1024x768", "1280x720", "1600x900",
+                "1920x1080", "2560x1440", "3840x2160"
+        });
+    
+        resolutionBox.add(resolutionLabel);
+        resolutionBox.add(resolutionDropDown);
+        controls.add(resolutionBox);
     }
 }
