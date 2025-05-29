@@ -2,11 +2,15 @@ package ui.grid;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import model.Ant;
 import model.Board;
 import model.Camera;
 import model.Square.SquareColor;
@@ -38,54 +42,51 @@ public class Grid extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
         if (board == null) return;
-        
-        int panelWidth = getWidth();
-        int panelHeight = getHeight();
-        double camWidth = camera.getWidth();
-        double camHeight = camera.getHeight();
 
-        double camX = camera.getX();
-        double camY = camera.getY();
+        BufferedImage img = new BufferedImage(
+            (int) camera.getWidth(),
+            (int) camera.getHeight(),
+            BufferedImage.TYPE_INT_RGB
+        );
 
-        for (int i = 0; i < camHeight; i++) {
-            for (int j = 0; j < camWidth; j++) {
-                double boardX = camX + j;
-                double boardY = camY + i;
+        Graphics2D gImg = (Graphics2D) img.createGraphics();
+        try {
+            gImg.setRenderingHint(
+                RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+            );
 
-                if (boardX < 0 || boardX >= board.getWidth() ||
-                        boardY < 0 || boardY >= board.getHeight()) {
-                    continue; 
+            for (int y = 0; y < camera.getHeight(); y++) {
+                for (int x = 0; x < camera.getWidth(); x++) {
+                    // These are board coordinates.
+                    int row = (int) camera.getY() + y;
+                    int col = (int) camera.getX() + x;
+
+                    Color color;
+                    if (board.getColorAt(row, col) == SquareColor.BLACK) {
+                        color = Color.BLACK;
+                    } else {
+                        color = Color.WHITE;
+                    }
+
+                    // x and y are screen coordinates.
+                    img.setRGB(x, y, color.getRGB());
                 }
-
-                int x1 = (j * panelWidth) / (int) camWidth;
-                int y1 = (i * panelHeight) / (int) camHeight;
-                int x2 = ((j + 1) * panelWidth) / (int) camWidth;
-                int y2 = ((i + 1) * panelHeight) / (int) camHeight;
-                
-                if (board.getColorAt((int) boardY, (int) boardX) == SquareColor.BLACK) {
-                    g.setColor(Color.BLACK);
-                } else {
-                    g.setColor(Color.WHITE);
-                }
-                g.fillRect(x1, y1, x2 - x1, y2 - y1);
             }
+
+            Ant ant = board.getAnt();
+            int antY = ant.getRow() - (int) camera.getY();
+            int antX = ant.getCol() - (int) camera.getX();
+
+            if (antX >= 0 && antX < camera.getWidth() 
+                && antY >= 0 && antY < camera.getHeight()) {
+                img.setRGB(antX, antY, Color.RED.getRGB());
+            } 
+
+            g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+        } finally {
+            gImg.dispose();
         }
-
-        var ant = board.getAnt();
-        int antRow = ant.getRow();
-        int antCol = ant.getCol();
-
-        int relativeAntRow = antRow - (int) camera.getY();
-        int relativeAntCol = antCol - (int) camera.getX();
-        
-        int antX1 = (relativeAntCol * panelWidth) / (int) camWidth;
-        int antY1 = (relativeAntRow * panelHeight) / (int) camHeight;
-        int antX2 = ((relativeAntCol + 1) * panelWidth) / (int) camWidth;
-        int antY2 = ((relativeAntRow + 1) * panelHeight) / (int) camHeight;
-
-        g.setColor(Color.RED);
-        g.fillRect(antX1, antY1, antX2 - antX1, antY2 - antY1);
     }
 }

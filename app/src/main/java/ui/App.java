@@ -17,8 +17,8 @@ import ui.grid.Grid;
 public class App extends JFrame implements SimulationController {
     private static final int SCREEN_WIDTH = 1280;
     private static final int SCREEN_HEIGHT = 720;
-    private static final int BOARD_WIDTH = 50;
-    private static final int BOARD_HEIGHT = 50;
+    private static final int BOARD_WIDTH = 200;
+    private static final int BOARD_HEIGHT = 200;
     private static final String[] RESOLUTIONS = new String[] {
         "50x50", "100x100", "200x200",
         "400x400", "800x800", "1600x1600",
@@ -78,7 +78,7 @@ public class App extends JFrame implements SimulationController {
     @Override
     public void reset() {
         board.resetState();
-        board.moveAntTo(Math.round(BOARD_HEIGHT / 2), Math.round(BOARD_WIDTH / 2));
+        board.moveAntTo(board.getHeight() / 2, board.getWidth() / 2);
         board.setAntDirection(0);
         grid.repaint();
     }
