@@ -26,8 +26,13 @@ public class Grid extends JPanel {
         addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                double zoomAmount = e.getPreciseWheelRotation();
-                camera.zoom(zoomAmount * 8);
+                double rotation = e.getPreciseWheelRotation();
+                
+                // zoom in by 10% of the board width.
+                int boardWidth = Grid.this.board.getWidth();
+                double zoomAmount = rotation * boardWidth * 0.02;
+
+                camera.zoom(zoomAmount);
                 repaint();
             }
         });
