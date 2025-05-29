@@ -1,48 +1,40 @@
 package model;
 
+import java.awt.Color;
+
 public class Square {
-    public enum SquareColor {
-        BLACK,
-        WHITE
-    }
-
-    SquareColor color;
+    private Color color;
 
     /**
-     * Generate a Cell with the given state.
-     * @param state The state you want to initialize the Cell with.
-     */
-    public Square(SquareColor state) {
-        this.color = state;
-    }
-
-    /**
-     * Generate a Cell with a default color of BLACK.
+     * Create a Square with a default color of BLACK.
      */
     public Square() {
-        this.color = SquareColor.BLACK;
+        this(Color.BLACK);
+    }
+
+    /**
+     * Create a Square with the given color.
+     * @param color The color of the Square.
+     */
+    public Square(Color color) {
+        this.color = color;
     }
 
     /**
      * Set the color of the square.
-     * @param state The state you want to set the cell to.
+     * 
+     * @param color The color you want to set the square to.
      */
-    public void setColor(SquareColor state) {
-        this.color = state;
-    }
-
-    /**
-     * Toggle the color of the square.
-     */
-    public void toggleState() {
-        color = color == SquareColor.BLACK ? SquareColor.WHITE : SquareColor.BLACK; 
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     /**
      * Get the color of the square.
-     * @return The state.
+     * 
+     * @return A Color object corresponding to the color of the square.
      */
-    public SquareColor getColor() {
+    public Color getColor() {
         return color;
     }
 }

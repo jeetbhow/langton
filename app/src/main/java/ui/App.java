@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.JFrame;
 import javax.swing.Timer;
+import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.regex.Matcher;
@@ -44,7 +45,6 @@ public class App extends JFrame implements SimulationController {
         sidebar = new Sidebar(this, RESOLUTIONS);
 
         board = new Board(BOARD_WIDTH, BOARD_HEIGHT);
-        board.createAnt(BOARD_HEIGHT / 2, BOARD_WIDTH / 2);
         grid = new Grid(board);
 
         add(sidebar, BorderLayout.WEST);
@@ -67,18 +67,18 @@ public class App extends JFrame implements SimulationController {
     @Override
     public void start() {
         timer.start();
+        grid.setIsDrawing(true);
     }
 
     @Override
     public void pause() {
         timer.stop();
+        grid.setIsDrawing(false);
     }
 
     @Override
     public void reset() {
         board.resetState();
-        board.moveAntTo(board.getHeight() / 2, board.getWidth() / 2);
-        board.setAntDirection(0);
         grid.repaint();
     }
 
@@ -102,9 +102,11 @@ public class App extends JFrame implements SimulationController {
         int height = Integer.parseInt(matcher.group(2));
 
         this.board = new Board(width, height);
-        board.createAnt((board.getHeight() / 2), (board.getWidth() / 2));
-        board.setAntDirection(0);
-
         grid.setBoard(board);
+    }
+
+    @Override
+    public void changeColor(Color color) {
+        grid.setMouseColor(color);
     }
 }

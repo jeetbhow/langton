@@ -1,7 +1,9 @@
 package ui.grid;
 
+import java.util.List;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -11,14 +13,19 @@ import javax.swing.JPanel;
 import model.Ant;
 import model.Board;
 import model.Camera;
-import model.Square.SquareColor;
 
 public class Grid extends JPanel {
+    private Point mousePosition;
+    private Point lastMousePosition;
+    private Color mouseColor;
     private Board board;
     private Camera camera;
+    private boolean isUpdating;
 
     public Grid(Board board) {
         this.board = board;
+        mouseColor = Color.WHITE;
+        isUpdating = false;
         camera = new Camera(board.getWidth(), board.getHeight());
 
         var controller = new GridMouseController(this);
@@ -33,14 +40,46 @@ public class Grid extends JPanel {
         return board;
     }
 
-    public Camera getCamera() {
-        return camera;
-    }
-
     public void setBoard(Board board) {
         this.board = board;
         camera = new Camera(board.getWidth(), board.getHeight());
         repaint();
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public Point getLastMousePosition() {
+        return lastMousePosition;
+    }
+
+    public void setLastMousePosition(Point p) {
+        lastMousePosition = p;
+    }
+
+    public Point getMousePosition() {
+        return mousePosition;
+    }
+
+    public void setMousePosition(Point p) {
+        mousePosition = p;
+    }
+
+    public void setIsDrawing(boolean isDrawing) {
+        this.isUpdating = isDrawing;
+    }
+
+    public boolean getIsUpdating() {
+        return isUpdating;
+    }
+
+    public Color getMouseColor() {
+        return mouseColor;
+    }
+
+    public void setMouseColor(Color color) {
+        mouseColor = color;
     }
 
     @Override
@@ -55,12 +94,13 @@ public class Grid extends JPanel {
         );
 
         Graphics2D gImg = (Graphics2D) img.createGraphics();
+
         try {
             gImg.setRenderingHint(
                 RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
             );
-
+        
             for (int y = 0; y < camera.getHeight(); y++) {
                 for (int x = 0; x < camera.getWidth(); x++) {
                     // These are board coordinates.
@@ -69,32 +109,42 @@ public class Grid extends JPanel {
 
                     if (row < 0 || row >= board.getHeight() ||
                         col < 0 || col >= board.getWidth()) {
-                            continue;
+                        continue;
                     }
 
-                    Color color;
-                    if (board.getColorAt(row, col) == SquareColor.BLACK) {
-                        color = Color.BLACK;
-                    } else {
-                        color = Color.WHITE;
-                    }
-
+                    Color color = board.getColorAt(row, col);
+    
                     // x and y are screen coordinates.
                     img.setRGB(x, y, color.getRGB());
                 }
             }
 
-            Ant ant = board.getAnt();
-            int antY = ant.getRow() - (int) camera.getY();
-            int antX = ant.getCol() - (int) camera.getX();
+            List<Ant> ants = board.getAnts();
+            for (var ant : ants) {
+                int antY = ant.getRow() - (int) camera.getY();
+                int antX = ant.getCol() - (int) camera.getX();
 
-            if (antX >= 0 && antX < camera.getWidth() 
-                && antY >= 0 && antY < camera.getHeight()) {
-                img.setRGB(antX, antY, Color.RED.getRGB());
-            } 
+                if (isUpdating) {
+                    if (antX >= 0 && antX < camera.getWidth() 
+                        && antY >= 0 && antY < camera.getHeight()) {
+                        img.setRGB(antX, antY, ant.getFgColor().getRGB());
+                    } 
+                } else {
+                    if (antX >= 0 && antX < camera.getWidth() 
+                        && antY >= 0 && antY < camera.getHeight()) {
+                        img.setRGB(antX, antY, ant.getColor().getRGB());
+                    } 
+                }
 
-            g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+            }
+
+            if (mousePosition != null && !isUpdating) {
+                int mx = mousePosition.x;
+                int my = mousePosition.y;
+                img.setRGB(mx, my, mouseColor.getRGB());
+            }
         } finally {
+            g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
             gImg.dispose();
         }
     }

@@ -7,7 +7,6 @@ import java.awt.event.MouseWheelEvent;
 
 public class GridMouseController extends MouseAdapter {
     private Grid grid;
-    private Point lastPoint;
 
     public GridMouseController(Grid grid) {
         this.grid = grid;
@@ -26,21 +25,51 @@ public class GridMouseController extends MouseAdapter {
     }
 
     @Override
+    public void mouseMoved(MouseEvent e) {
+        Point p = e.getPoint(); 
+
+        // We divide the point by the board's dimensions to transform
+        // the point to board coordinates.
+        double camWidth = grid.getCamera().getWidth();
+        double camHeight = grid.getCamera().getHeight();
+
+        // We compute the coordinates in screen-space.
+        p.x = (int) (p.x * (camWidth / grid.getWidth()));
+        p.y =  (int) (p.y * (camHeight / grid.getHeight()));
+
+        grid.setMousePosition(p);
+        grid.repaint();
+    }
+
+    @Override
     public void mousePressed(MouseEvent e) {
-        lastPoint = e.getPoint();
+        Point mousePosition = grid.getMousePosition();
+        grid.setLastMousePosition(mousePosition);  
+
+        if (!grid.getIsUpdating()) {
+            grid.getBoard().createAnt(mousePosition.y, mousePosition.x, grid.getMouseColor());      
+            grid.repaint();
+        }
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
         Point currPoint = e.getPoint();
+        Point lastPoint = grid.getLastMousePosition();
 
+        double camWidth = grid.getCamera().getWidth();
+        double camHeight = grid.getCamera().getHeight();
+
+        // We compute the coordinates in screen-space.
+        currPoint.x = (int) (currPoint.x * (camWidth / grid.getWidth()));
+        currPoint.y =  (int) (currPoint.y * (camHeight / grid.getHeight()));
         double dx = -(currPoint.x - lastPoint.x);
         double dy = -(currPoint.y - lastPoint.y);
-        dx *= grid.getCamera().getWidth() * 0.001;
-        dy *= grid.getCamera().getWidth() * 0.001;
 
-        lastPoint = currPoint;
+        dx *= grid.getCamera().getWidth() * 0.005;
+        dy *= grid.getCamera().getWidth() * 0.005;
 
+        grid.setLastMousePosition(currPoint);
         grid.getCamera().pan(dx, dy);
         grid.repaint();
     }

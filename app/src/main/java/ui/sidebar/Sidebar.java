@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,11 +24,12 @@ public class Sidebar extends JPanel {
         controls.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         setLayout(new BorderLayout(0, 10));
-        setPreferredSize(new Dimension(250, getPreferredSize().height));
+        setPreferredSize(new Dimension(650, getPreferredSize().height));
 
         setupTimelineBtns();
         setupDelaySlider();
         setupResolutionDropdown(resolutions);
+        setupColorPicker();
 
         add(controls, BorderLayout.CENTER);
     }
@@ -54,7 +56,7 @@ public class Sidebar extends JPanel {
     private void setupDelaySlider() {
         Box delaySliderBox = Box.createHorizontalBox();
         var delayLabel = new JLabel("Delay");
-        var delaySlider = new JSlider(0, 50);
+        var delaySlider = new JSlider(0, 100);
         delaySlider.setMajorTickSpacing(10);
         delaySlider.addChangeListener(e -> controller.changeDelay(delaySlider.getValue()));
 
@@ -76,5 +78,15 @@ public class Sidebar extends JPanel {
         resolutionBox.add(resolutionLabel);
         resolutionBox.add(resolutionDropDown);
         controls.add(resolutionBox);
+    }
+
+    private void setupColorPicker() {
+        var colorPicker = new JColorChooser();
+        
+        colorPicker.getSelectionModel().addChangeListener(e -> {
+            controller.changeColor(colorPicker.getColor());
+        });
+
+        controls.add(colorPicker);
     }
 }

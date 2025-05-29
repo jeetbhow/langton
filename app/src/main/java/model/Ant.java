@@ -1,14 +1,34 @@
 package model;
 
+import java.awt.Color;
+
 public class Ant {
     private int row;
     private int col;
-    private int direction; // Range 0-3. Loops back around.
+    private Color color;
+    private Color foregroundColor;
+    private int direction;              // Range 0-3. Loops back around.
 
+    // TODO Add documentation here.
     public Ant(int row, int col) {
+        this(row, col, Color.WHITE);
+    }
+
+    // TODO Add documentation
+    public Ant(int row, int col, Color color) {
         this.row = row;
         this.col = col;
+        this.color = color;
         this.direction = 0;
+
+        float[] hsb = Color.RGBtoHSB(color.getRed(),
+            color.getGreen(),
+            color.getBlue(),
+            null
+        );
+
+        float complementaryHue = (hsb[0] + 0.5f) % 1.0f;
+        foregroundColor = Color.getHSBColor(complementaryHue, hsb[1], hsb[2]);
     }
 
     /**
@@ -38,6 +58,24 @@ public class Ant {
      */
     public int getCol() {
         return col;
+    }
+
+    /**
+     * Get the ant's color.
+     * 
+     * @return A Color object representing the color of the ant.
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * Get the foreground color of the ant.
+     * 
+     * @return A Color object representing the foreground color of the ant.
+     */
+    public Color getFgColor() {
+        return foregroundColor;
     }
 
     /**

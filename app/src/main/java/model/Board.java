@@ -1,12 +1,14 @@
 package model;
 
-import model.Square.SquareColor;
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.Color;
 
 public class Board {
     private int width;
     private int height;
     private Square[][] squares;
-    private Ant ant;
+    private List<Ant> ants;
 
     /**
      * Create a Board with the given dimensions. Each square in the board is
@@ -18,13 +20,8 @@ public class Board {
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
-
-        squares = new Square[height][width];
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                squares[i][j] = new Square();
-            }
-        }
+        this.squares = createSquares(height, width);
+        ants = new ArrayList<>();
     }
 
     /**
@@ -46,145 +43,168 @@ public class Board {
     }
 
     /**
-     * Get the ant.
+     * Get the ants that are on the board.
      * 
-     * @return The Ant object attached to this board.
+     * @return A list of ants.
      */
-    public Ant getAnt() {
-        return ant;
+    public List<Ant> getAnts() {
+        return ants;
     }
 
     /**
-     * Move the ant to the specified location.
+     * Move an ant to the specified location.
      * 
+     * @param i   The index of the ant that you want to retrieve.
      * @param row The row you want to move to.
      * @param col The column you want to move to.
      */
-    public void moveAntTo(int row, int col) {
-        ant.moveTo(row, col);
+    public void moveAntTo(int i, int row, int col) {
+        ants.get(i).moveTo(row, col);
     }
 
     /**
-     * Determine whether or not the ant is at the given position.
+     * Determine whether or not an ant is at a given location.
      * 
+     * @param i   The index of the ant.
      * @param row The row to query.
      * @param col The column to query.
      * @return True if the ant is at the location and false otherwise.
      */
-    public boolean isAntAt(int row, int col) {
-        return ant.isAt(row, col);
+    public boolean isAntAt(int i, int row, int col) {
+        return ants.get(i).isAt(row, col);
     }
 
     /**
-     * Create an ant at the given location. If an ant already exists then nothing
-     * happens.
+     * Create a white ant at the given location.
      * 
      * @param row The row you want to put the ant at.
      * @param col The column you want to put the ant at.
      */
     public void createAnt(int row, int col) {
-        if (ant == null) {
-            ant = new Ant(row, col);
-        }
+        createAnt(row, col, Color.WHITE);
     }
 
     /**
-     * Get the direction the ant is facing.
+     * Create an ant at the given location and assign its color.
      * 
-     * @return
+     * @param row The row you want to put the ant.
+     * @param col The column you want to put the ant.
+     * @param color The color of the ant.
      */
-    public int getAntDirection() {
-        return ant.getDirection();
+    public void createAnt(int row, int col, Color color) {
+        ants.add(new Ant(row, col, color));
     }
 
     /**
-     * Set the ant's direction.
+     * Get the direction an ant is facing.
      * 
+     * @param i The index of the ant.
+     * @return The direction that the ant is facing.
+     */
+    public int getAntDirection(int i) {
+        return ants.get(i).getDirection();
+    }
+
+    /**
+     * Set an ant's direction.
+     * 
+     * @param i The index of the ant.
      * @param direction The direction that you want to set the ant to.
      * @throws IllegalArgumentException If the user passes a direction outside the
      *                                  range of [0, 3]
      */
-    public void setAntDirection(int direction) {
+    public void setAntDirection(int i, int direction) {
         if (direction < 0 || direction > 3) {
             throw new IllegalArgumentException(
                     String.format(
                             "Invalid direction %d is outside the range [0, 3].", direction));
         }
-        ant.setDirection(direction);
+        ants.get(i).setDirection(direction);
     }
 
     /**
-     * Get the state of the square at the given location.
+     * Get the color of the square at the given location.
      * 
      * @param row The y-coordinate of the location.
      * @param col The x-coordinate of the location.
-     * @return A SquareState enum indicating the color of the square at that
-     *         location.
+     * @return A Color object representing the color of the square at that location.
      */
-    public SquareColor getColorAt(int row, int col) {
+    public Color getColorAt(int row, int col) {
         return squares[row][col].getColor();
     }
 
     /**
-     * Flip the state of a particular square on the board.
+     * Set the color of the square at the given location.
      * 
-     * @param row   The y-coordinate of the square.
-     * @param col   The x-coordinate of the square.
-     * @param state The state that you want to set the square to.
+     * @param row   The square's row
+     * @param col   The square's column
+     * @param color The color to set.
      */
-    public void flipStateAt(int row, int col) {
-        squares[row][col].toggleState();
+    public void setColorAt(int row, int col, Color color) {
+        squares[row][col].setColor(color);
     }
 
     /**
      * Reset the entire state of the board to black.
      */
     public void resetState() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (squares[i][j].getColor() == SquareColor.WHITE) {
-                    flipStateAt(i, j);
-                }
-            }
-        }
+        this.squares = createSquares(height, width);
     }
 
     /**
      * Update the state of the board.
-     * 
-     * @throws IllegalStateException If there is no ant currently on the board.
      */
     public void update() {
-        if (ant == null) {
-            throw new IllegalStateException("There must be an ant on the board to call update.");
+        for (var ant : ants) {
+            int antRow = ant.getRow();
+            int antCol = ant.getCol();
+            Square square = squares[antRow][antCol];
+
+            // Note: If the square's color matches the ant's color then we turn
+            // CLOCKWISE. If it's black then we turn COUNTERCLOCKWISE. The way that
+            // I've implemented this is to use integers that map onto the 4 cardinal
+            // directions. The modulo operator allows you to wrap around. 
+            // N -> 1
+            // E -> 2
+            // S -> 3
+            // W -> 4
+            // TODO In the future it might be better to use enums to represent directions
+            // because this is a little hard to understand.
+            int direction = ant.getDirection();
+            if (square.getColor().equals(ant.getColor())) {
+                ant.setDirection((direction + 1) % 4);
+            } else {
+                ant.setDirection((direction + 3) % 4);
+            }
+
+            // Move based on that direction
+            switch (ant.getDirection()) {
+                case 0 -> ant.moveTo(antRow - 1, antCol);
+                case 1 -> ant.moveTo(antRow, antCol + 1);
+                case 2 -> ant.moveTo(antRow + 1, antCol);
+                case 3 -> ant.moveTo(antRow, antCol - 1);
+                default ->
+                    throw new IllegalStateException(
+                            String.format(
+                                    "%d is not a valid direction", ant.getDirection()));
+            }
+
+            // Flip the square that the ant was on.
+            if (square.getColor().equals(Color.BLACK)) {
+                setColorAt(antRow, antCol, ant.getColor());
+            } else {
+                setColorAt(antRow, antCol, Color.BLACK);
+            }
         }
+    }
 
-        int antRow = ant.getRow();
-        int antCol = ant.getCol();
-        Square square = squares[antRow][antCol];
-        SquareColor color = square.getColor();
-
-        // Flip the square that the ant is on.
-        flipStateAt(antRow, antCol);
-
-        // Change the ant direction.
-        int direction = ant.getDirection();
-        if (color == SquareColor.WHITE) {
-            ant.setDirection((direction + 1) % 4);
-        } else {
-            ant.setDirection((direction + 3) % 4);
+    private Square[][] createSquares(int rows, int cols) {
+        squares = new Square[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                squares[i][j] = new Square();
+            }
         }
-
-        // Move based on that direction
-        switch (ant.getDirection()) {
-            case 0 -> ant.moveTo(antRow - 1, antCol);
-            case 1 -> ant.moveTo(antRow, antCol + 1);
-            case 2 -> ant.moveTo(antRow + 1, antCol);
-            case 3 -> ant.moveTo(antRow, antCol - 1);
-            default ->
-                throw new IllegalStateException(
-                        String.format(
-                                "%d is not a valid direction", ant.getDirection()));
-        }
+        return squares;
     }
 }
