@@ -1,13 +1,11 @@
 package ui.grid;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
-
 import javax.swing.JPanel;
 
 import model.Ant;
@@ -23,19 +21,20 @@ public class Grid extends JPanel {
         this.board = board;
         camera = new Camera(board.getWidth(), board.getHeight());
 
-        addMouseWheelListener(new MouseAdapter() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                double rotation = e.getPreciseWheelRotation();
-                
-                // zoom in by 10% of the board width.
-                int boardWidth = Grid.this.board.getWidth();
-                double zoomAmount = rotation * boardWidth * 0.02;
+        var controller = new GridMouseController(this);
 
-                camera.zoom(zoomAmount);
-                repaint();
-            }
-        });
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        addMouseListener(controller);
+        addMouseWheelListener(controller);
+        addMouseMotionListener(controller);
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 
     public void setBoard(Board board) {
@@ -67,6 +66,11 @@ public class Grid extends JPanel {
                     // These are board coordinates.
                     int row = (int) camera.getY() + y;
                     int col = (int) camera.getX() + x;
+
+                    if (row < 0 || row >= board.getHeight() ||
+                        col < 0 || col >= board.getWidth()) {
+                            continue;
+                    }
 
                     Color color;
                     if (board.getColorAt(row, col) == SquareColor.BLACK) {

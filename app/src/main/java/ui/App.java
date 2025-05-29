@@ -1,11 +1,10 @@
 package ui;
 
-import java.awt.BorderLayout;
-
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.JFrame;
 import javax.swing.Timer;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -8,13 +8,13 @@ public class Camera {
     private double maxWidth;
     private double maxHeight;
 
-    public Camera(double x, double y, double width, double height) {
+    public Camera(double x, double y, double width, double height, double maxWidth, double maxHeight) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.maxHeight = height;
-        this.maxWidth = width;
+        this.maxHeight = maxHeight;
+        this.maxWidth = maxWidth;
     }
 
     public Camera(double width, double height) {
@@ -51,20 +51,21 @@ public class Camera {
     }
 
     public void zoom(double amount) {
-        // 1 ️⃣ find the current centre of the view in board coordinates
         double centreX = x + width / 2.0;
-        double centreY = y + height / 2.0; // ← use height, not width
+        double centreY = y + height / 2.0;
 
-        // 2 ️⃣ work out the new view size, clamped to the board bounds
         double newWidth = Math.clamp(width + amount, 1, maxWidth);
         double newHeight = Math.clamp(height + amount, 1, maxHeight);
 
-        // 3 ️⃣ put the centre back where it was
-        // Valid range for the top-left corner is [0 , board-size – view-size]
         x = Math.clamp(centreX - newWidth / 2.0, 0, maxWidth - newWidth);
         y = Math.clamp(centreY - newHeight / 2.0, 0, maxHeight - newHeight);
 
         width = newWidth;
         height = newHeight;
+    }
+
+    public void pan(double dx, double dy) {
+        x = Math.clamp(x + dx, 0.0, maxWidth - width);
+        y = Math.clamp(y + dy, 0.0, maxHeight - height);
     }
 }

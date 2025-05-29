@@ -3,7 +3,6 @@ package ui.sidebar;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
