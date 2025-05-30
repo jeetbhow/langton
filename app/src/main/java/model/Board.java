@@ -149,6 +149,7 @@ public class Board {
      */
     public void resetState() {
         this.squares = createSquares(height, width);
+        this.ants.clear();
     }
 
     /**
