@@ -179,10 +179,10 @@ public class Board {
 
             // Move based on that direction
             switch (ant.getDirection()) {
-                case 0 -> ant.moveTo(antRow - 1, antCol);
-                case 1 -> ant.moveTo(antRow, antCol + 1);
-                case 2 -> ant.moveTo(antRow + 1, antCol);
-                case 3 -> ant.moveTo(antRow, antCol - 1);
+                case 0 -> ant.moveTo((antRow + height - 1) % height, antCol);
+                case 1 -> ant.moveTo(antRow, (antCol + 1) % width);
+                case 2 -> ant.moveTo((antRow + 1) % height, antCol);
+                case 3 -> ant.moveTo(antRow, (antCol + width - 1) % width);
                 default ->
                     throw new IllegalStateException(
                             String.format(

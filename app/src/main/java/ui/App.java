@@ -56,12 +56,8 @@ public class App extends JFrame implements SimulationController {
     }
 
     private void updateBoard(ActionEvent event) {
-        try {
-            board.update();
-            grid.repaint();
-        } catch (IndexOutOfBoundsException e) {
-            timer.stop();
-        }
+        board.update();
+        grid.repaint();
     }
 
     @Override
