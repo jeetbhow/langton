@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,6 +14,8 @@ import javax.swing.border.EmptyBorder;
 import ui.SimulationController;
 
 public class Sidebar extends JPanel {
+    private static final int PREFERRED_WIDTH = 250;
+    
     private SimulationController controller;
     private JPanel controls;
 
@@ -24,12 +25,11 @@ public class Sidebar extends JPanel {
         controls.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         setLayout(new BorderLayout(0, 10));
-        setPreferredSize(new Dimension(650, getPreferredSize().height));
+        setPreferredSize(new Dimension(PREFERRED_WIDTH, getPreferredSize().height));
 
         setupTimelineBtns();
         setupDelaySlider();
         setupResolutionDropdown(resolutions);
-        setupColorPicker();
 
         add(controls, BorderLayout.CENTER);
     }
@@ -78,15 +78,5 @@ public class Sidebar extends JPanel {
         resolutionBox.add(resolutionLabel);
         resolutionBox.add(resolutionDropDown);
         controls.add(resolutionBox);
-    }
-
-    private void setupColorPicker() {
-        var colorPicker = new JColorChooser();
-        
-        colorPicker.getSelectionModel().addChangeListener(e -> {
-            controller.changeColor(colorPicker.getColor());
-        });
-
-        controls.add(colorPicker);
     }
 }

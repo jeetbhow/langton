@@ -12,11 +12,12 @@ import java.util.regex.Pattern;
 
 import model.Board;
 import ui.sidebar.Sidebar;
+import ui.bottomBar.BottomBar;
 import ui.grid.Grid;
 
 public class App extends JFrame implements SimulationController {
-    private static final int SCREEN_WIDTH = 1280;
-    private static final int SCREEN_HEIGHT = 720;
+    private static final int SCREEN_WIDTH = 1000;
+    private static final int SCREEN_HEIGHT = 1000;
     private static final int BOARD_WIDTH = 200;
     private static final int BOARD_HEIGHT = 200;
     private static final String[] RESOLUTIONS = new String[] {
@@ -25,6 +26,7 @@ public class App extends JFrame implements SimulationController {
     };
 
     private Timer timer;
+    private BottomBar bottomBar;
     private Sidebar sidebar;
     private Board board;
     private Grid grid;
@@ -43,11 +45,12 @@ public class App extends JFrame implements SimulationController {
     public App() {
         timer = new Timer(25, this::updateBoard);
         sidebar = new Sidebar(this, RESOLUTIONS);
-
+        bottomBar = new BottomBar(this);
         board = new Board(BOARD_WIDTH, BOARD_HEIGHT);
         grid = new Grid(board);
 
         add(sidebar, BorderLayout.WEST);
+        add(bottomBar, BorderLayout.SOUTH);
         add(grid, BorderLayout.CENTER);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
