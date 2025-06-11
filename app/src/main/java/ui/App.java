@@ -2,6 +2,12 @@ package ui;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import java.awt.Color;
@@ -34,7 +40,7 @@ public class App extends JFrame implements SimulationController {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                UIManager.setLookAndFeel(new FlatDarkLaf());
             } catch (Exception e) {
                 e.printStackTrace();
             }
